@@ -2,6 +2,9 @@ package main
 
 import "core:fmt"
 import "core:math/rand"
+import "core:os"
+
+import assets "assets"
 
 import sdl "vendor:sdl2"
 import img "vendor:sdl2/image"
@@ -152,6 +155,11 @@ window_deinit :: proc(win: ^Window) {
 	sdl.DestroyWindow(win.win)
 }
 
+write_temp_assets :: proc() {
+	os.write_entire_file("./youareanidiot_img.png", assets.IMAGE)
+	os.write_entire_file("./youareanidiot_snd.mp3", assets.SOUND)
+}
+
 app_init :: proc(state: ^State) {
 	sdl_init_err := sdl.Init(sdl.INIT_EVERYTHING)
 	assert(sdl_init_err == 0, sdl.GetErrorString())
@@ -159,11 +167,11 @@ app_init :: proc(state: ^State) {
 
 	// nice and calming music
 	mix.OpenAudio(44100, sdl.AUDIO_S16, 1, 4096)
-	state.music = mix.LoadMUS("./sound.mp3")
+	state.music = mix.LoadMUS("./youareanidiot_snd.mp3")
 	mix.PlayMusic(state.music, -1)
 
 	// amazing imag™
-	state.image = img.Load("./image.png")
+	state.image = img.Load("./youareanidiot_img.png")
 	assert(state.image != nil, sdl.GetErrorString())
 
 	state.next_time = sdl.GetTicks() + FPS
@@ -238,6 +246,8 @@ app_loop :: proc(state: ^State) {
 
 main :: proc() {
 	state := State{}
+
+	write_temp_assets()
 
 	app_init(&state)
 	defer app_deinit(&state)
