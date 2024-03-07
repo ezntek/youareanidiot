@@ -143,9 +143,9 @@ window_loop :: proc(win: ^Window, timer: u32) {
 		sdl.UpdateTexture(win.image_texture, nil, win.image.pixels, win.image.pitch)
 		sdl.RenderClear(win.ren)
 		sdl.RenderCopy(win.ren, win.image_texture, nil, nil)
-		sdl.RenderPresent(win.ren)
 	}
 
+	sdl.RenderPresent(win.ren)
 	window_update_position(win)
 }
 
